@@ -10,6 +10,7 @@
 *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
 
 :root {
+color-scheme: dark;
 –deep-purple: #1a0a2e;
 –mid-purple:  #2d1456;
 –card-bg:     rgba(45,20,86,0.4);
@@ -25,10 +26,10 @@
 –r:           20px;
 }
 
-html { scroll-behavior:smooth; }
+html { scroll-behavior:smooth; background:#1a0a2e; }
 
 body {
-background: var(–deep-purple);
+background: #1a0a2e;
 color: var(–white);
 font-family: ‘Raleway’, sans-serif;
 font-weight: 300;
@@ -482,7 +483,7 @@ body{background:#1a0a2e !important}
 
 <script>
 
-const ANTHROPIC_KEY = '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';
+const ANTHROPIC_KEY = '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';
 
 function openInspire(){ document.getElementById('inspireModal').classList.add('on'); document.getElementById('inspireInput').focus(); }
 function closeInspire(){ document.getElementById('inspireModal').classList.remove('on'); }
