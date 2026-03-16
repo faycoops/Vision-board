@@ -1,677 +1,1237 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Vision Board Generator — by Fay</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Cinzel:wght@400;500;600&family=Raleway:wght@200;300;400;500&display=swap" rel="stylesheet">
-<style>
-*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vision Board Generator — by Fay</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Cinzel:wght@400;500;600&family=Raleway:wght@200;300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-:root {
-color-scheme: dark;
-–deep-purple: #1a0a2e;
-–mid-purple:  #2d1456;
-–card-bg:     rgba(45,20,86,0.4);
-–gold:        #f59e0b;
-–gold-light:  #fcd34d;
-–gold-pale:   #fef3c7;
-–gold-glow:   rgba(245,158,11,0.5);
-–white:       #faf5ff;
-–muted:       rgba(250,245,255,0.6);
-–muted2:      rgba(250,245,255,0.28);
-–border:      rgba(245,158,11,0.2);
-–border-h:    rgba(245,158,11,0.5);
-–r:           20px;
-}
+    :root {
+      color-scheme: dark;
+      --deep-purple: #1a0a2e;
+      --mid-purple: #2d1456;
+      --card-bg: rgba(45,20,86,0.4);
+      --gold: #f59e0b;
+      --gold-light: #fcd34d;
+      --gold-pale: #fef3c7;
+      --gold-glow: rgba(245,158,11,0.5);
+      --white: #faf5ff;
+      --muted: rgba(250,245,255,0.6);
+      --muted2: rgba(250,245,255,0.28);
+      --border: rgba(245,158,11,0.2);
+      --border-h: rgba(245,158,11,0.5);
+      --r: 20px;
+    }
 
-html { scroll-behavior:smooth; background:#1a0a2e; }
+    html { scroll-behavior: smooth; background: #1a0a2e; }
 
-body {
-background: #1a0a2e;
-color: var(–white);
-font-family: ‘Raleway’, sans-serif;
-font-weight: 300;
-min-height: 100vh;
-overflow-x: hidden;
--webkit-font-smoothing: antialiased;
-}
+    body {
+      background: #1a0a2e;
+      color: var(--white);
+      font-family: 'Raleway', sans-serif;
+      font-weight: 300;
+      min-height: 100vh;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
 
-/* STARS */
-#starfield { position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden; }
-.star { position:absolute; border-radius:50%; background:#fff; animation:twinkle var(–d,3s) ease-in-out infinite alternate; }
-@keyframes twinkle { from{opacity:0.08;transform:scale(0.7)} to{opacity:0.9;transform:scale(1.5)} }
+    #starfield { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+    .star { position: absolute; border-radius: 50%; background: #fff; animation: twinkle var(--d, 3s) ease-in-out infinite alternate; }
+    @keyframes twinkle { from { opacity: 0.08; transform: scale(0.7); } to { opacity: 0.9; transform: scale(1.5); } }
 
-/* NEBULA */
-#cosmos { position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden; }
-#cosmos::before {
-content:’’;
-position:absolute; inset:0;
-background:
-radial-gradient(ellipse at 20% 20%, rgba(107,33,168,0.45) 0%, transparent 50%),
-radial-gradient(ellipse at 80% 80%, rgba(245,158,11,0.18) 0%, transparent 50%),
-radial-gradient(ellipse at 60% 10%, rgba(88,28,135,0.35) 0%, transparent 40%),
-radial-gradient(ellipse at 10% 70%, rgba(55,10,100,0.4) 0%, transparent 45%);
-}
+    #cosmos { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+    #cosmos::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 20% 20%, rgba(107,33,168,0.45) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 80%, rgba(245,158,11,0.18) 0%, transparent 50%),
+        radial-gradient(ellipse at 60% 10%, rgba(88,28,135,0.35) 0%, transparent 40%),
+        radial-gradient(ellipse at 10% 70%, rgba(55,10,100,0.4) 0%, transparent 45%);
+    }
 
-/* PAGE */
-.page { position:relative; z-index:1; max-width:860px; margin:0 auto; padding:100px 40px 130px; }
-@media(max-width:640px){ .page{ padding:64px 20px 100px; } }
+    .page { position: relative; z-index: 1; max-width: 860px; margin: 0 auto; padding: 100px 40px 130px; }
+    @media (max-width: 640px) { .page { padding: 64px 20px 100px; } }
 
-/* HEADER */
-.hdr { text-align:center; margin-bottom:80px; animation:up 1s cubic-bezier(.16,1,.3,1) both; }
+    .hdr { text-align: center; margin-bottom: 80px; animation: up 1s cubic-bezier(.16,1,.3,1) both; }
 
-.crown {
-display:block; font-size:3rem; margin-bottom:16px;
-filter: drop-shadow(0 0 20px var(–gold-glow)) drop-shadow(0 0 50px var(–gold-glow));
-animation:float 5s ease-in-out infinite;
-}
-@keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
+    .crown {
+      display: block;
+      font-size: 3rem;
+      margin-bottom: 16px;
+      filter: drop-shadow(0 0 20px var(--gold-glow)) drop-shadow(0 0 50px var(--gold-glow));
+      animation: float 5s ease-in-out infinite;
+    }
 
-.hdr-eye {
-font-family:‘Cinzel’,serif; font-size:0.62rem;
-letter-spacing:0.35em; text-transform:uppercase;
-color:var(–gold); text-shadow:0 0 20px var(–gold-glow);
-margin-bottom:20px;
-}
+    @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
 
-.hdr h1 {
-font-family:‘Cinzel’,serif; font-weight:600;
-font-size:clamp(2.2rem,5.5vw,3.8rem);
-line-height:1.1; letter-spacing:0.04em;
-background:linear-gradient(135deg, #fef3c7, #fcd34d, #f59e0b);
--webkit-background-clip:text; background-clip:text;
--webkit-text-fill-color:transparent;
-filter:drop-shadow(0 0 30px var(–gold-glow));
-margin-bottom:10px;
-}
+    .hdr-eye {
+      font-family: 'Cinzel', serif;
+      font-size: 0.62rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--gold);
+      text-shadow: 0 0 20px var(--gold-glow);
+      margin-bottom: 20px;
+    }
 
-.hdr-italic {
-display:block;
-font-family:‘Cormorant Garamond’,serif;
-font-style:italic; font-weight:300;
-font-size:clamp(2.6rem,6vw,4.4rem);
-background:linear-gradient(135deg, #fff 0%, #fcd34d 50%, #f59e0b 100%);
--webkit-background-clip:text; background-clip:text;
--webkit-text-fill-color:transparent;
-margin-top:4px;
-}
+    .hdr h1 {
+      font-family: 'Cinzel', serif;
+      font-weight: 600;
+      font-size: clamp(2.2rem, 5.5vw, 3.8rem);
+      line-height: 1.1;
+      letter-spacing: 0.04em;
+      background: linear-gradient(135deg, #fef3c7, #fcd34d, #f59e0b);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 0 30px var(--gold-glow));
+      margin-bottom: 10px;
+    }
 
-.ornament {
-display:flex; align-items:center; justify-content:center; gap:14px;
-margin:28px auto;
-}
-.orn-line { width:90px; height:1px; background:linear-gradient(90deg,transparent,var(–gold-glow)); }
-.orn-line.r { background:linear-gradient(90deg,var(–gold-glow),transparent); }
-.orn-gems { color:var(–gold); font-size:0.6rem; letter-spacing:0.3em; text-shadow:0 0 12px var(–gold-glow); }
+    .hdr-italic {
+      display: block;
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-weight: 300;
+      font-size: clamp(2.6rem, 6vw, 4.4rem);
+      background: linear-gradient(135deg, #fff 0%, #fcd34d 50%, #f59e0b 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-top: 4px;
+    }
 
-.hdr-sub {
-font-family:‘Cormorant Garamond’,serif; font-style:italic;
-font-size:1.15rem; color:#ffffff; line-height:1.8;
-max-width:500px; margin:0 auto; font-weight:400;
-}
+    .ornament {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      margin: 28px auto;
+    }
 
-/* DIVIDER */
-.divider {
-display:flex; align-items:center; gap:16px;
-margin-bottom:32px; animation:up 1s cubic-bezier(.16,1,.3,1) 0.1s both;
-}
-.divider::before,.divider::after { content:’’; flex:1; height:1px; background:linear-gradient(90deg,transparent,var(–border),transparent); }
-.divider span { font-family:‘Cinzel’,serif; font-size:0.55rem; letter-spacing:0.25em; text-transform:uppercase; color:#ffffff; white-space:nowrap; font-weight:400; }
+    .orn-line { width: 90px; height: 1px; background: linear-gradient(90deg, transparent, var(--gold-glow)); }
+    .orn-line.r { background: linear-gradient(90deg, var(--gold-glow), transparent); }
+    .orn-gems { color: var(--gold); font-size: 0.6rem; letter-spacing: 0.3em; text-shadow: 0 0 12px var(--gold-glow); }
 
-/* GRID */
-.grid {
-display:grid; grid-template-columns:1fr 1fr;
-grid-auto-rows:1fr; gap:16px;
-margin-bottom:48px;
-animation:up 1s cubic-bezier(.16,1,.3,1) 0.15s both;
-}
-@media(max-width:560px){ .grid{ grid-template-columns:1fr; grid-auto-rows:auto; } }
+    .hdr-sub {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 1.15rem;
+      color: #ffffff;
+      line-height: 1.8;
+      max-width: 500px;
+      margin: 0 auto;
+      font-weight: 400;
+    }
 
-.field {
-background:rgba(255,255,255,0.07);
-border:1px solid rgba(255,255,255,0.35);
-border-radius:var(–r);
-padding:22px 24px 20px;
-display:flex; flex-direction:column; gap:12px;
-backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px);
-transition:border-color .3s, background .3s, box-shadow .3s;
-position:relative; overflow:hidden;
-}
-.field::before { content:’’; position:absolute; top:0; left:0; right:0; height:1px; background:linear-gradient(90deg,transparent,var(–border-h),transparent); opacity:0; transition:opacity .3s; }
-.field:focus-within::before { opacity:1; }
-.field:focus-within { border-color:rgba(255,255,255,0.6); background:rgba(255,255,255,0.1); box-shadow:0 0 20px rgba(255,255,255,0.08); }
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 32px;
+      animation: up 1s cubic-bezier(.16,1,.3,1) 0.1s both;
+    }
 
-.field-top { display:flex; align-items:center; gap:10px; }
-.field-ico { font-size:1.4rem; flex-shrink:0; }
-.field-lbl { font-family:‘Cinzel’,serif; font-size:0.6rem; font-weight:400; letter-spacing:0.18em; text-transform:uppercase; color:var(–gold); text-shadow:0 0 10px var(–gold-glow); }
-.field textarea { flex:1; background:transparent; border:none; outline:none; color:var(–white); font-family:‘Raleway’,sans-serif; font-weight:300; font-size:0.88rem; line-height:1.65; resize:none; width:100%; min-height:68px; caret-color:var(–gold); }
-.field textarea::placeholder { color:var(–muted2); font-style:italic; }
+    .divider::before, .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+    }
 
-/* BUTTON */
-.cta-wrap { text-align:center; animation:up 1s cubic-bezier(.16,1,.3,1) 0.22s both; }
-.btn-main {
-position:relative; display:inline-flex; align-items:center; gap:12px;
-padding:20px 60px; border-radius:100px;
-border:2px solid rgba(255,255,255,0.8);
-background:rgba(255,255,255,0.05);
-color:#ffffff;
-font-family:‘Cinzel’,serif; font-size:0.7rem; font-weight:400;
-letter-spacing:0.25em; text-transform:uppercase;
-cursor:pointer; overflow:hidden;
-transition:all .45s cubic-bezier(.16,1,.3,1);
-box-shadow:0 0 30px rgba(245,158,11,0.06);
-}
-.btn-main::before { content:’’; position:absolute; top:0; left:-100%; width:60%; height:100%; background:linear-gradient(90deg,transparent,rgba(255,255,255,0.12),transparent); transition:left .65s; }
-.btn-main:hover::before { left:150%; }
-.btn-main:hover { border-color:#ffffff; background:rgba(255,255,255,0.12); color:#fff; transform:translateY(-3px); box-shadow:0 0 40px rgba(255,255,255,0.15),0 16px 40px rgba(0,0,0,0.5); letter-spacing:0.32em; }
-.btn-main span { position:relative; z-index:1; }
-.cta-hint { margin-top:16px; font-family:‘Cormorant Garamond’,serif; font-style:italic; font-size:0.88rem; color:var(–muted2); }
+    .divider span {
+      font-family: 'Cinzel', serif;
+      font-size: 0.55rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: #ffffff;
+      white-space: nowrap;
+      font-weight: 400;
+    }
 
-/* INSPIRE ME */
-.inspire-wrap { text-align:center; margin-bottom:28px; animation:up 1s cubic-bezier(.16,1,.3,1) 0.08s both; }
-.btn-inspire {
-display:inline-flex; align-items:center; gap:10px;
-padding:13px 36px; border-radius:100px;
-border:1px solid rgba(255,255,255,0.6);
-background:transparent; color:#ffffff;
-font-family:‘Cinzel’,serif; font-size:0.62rem; font-weight:400;
-letter-spacing:0.2em; text-transform:uppercase;
-cursor:pointer; transition:all .35s;
-}
-.btn-inspire:hover { background:rgba(255,255,255,0.08); border-color:#ffffff; box-shadow:0 0 20px rgba(255,255,255,0.1); transform:translateY(-2px); }
-.inspire-hint { margin-top:10px; font-family:‘Cormorant Garamond’,serif; font-style:italic; font-size:0.82rem; color:#ffffff; }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-auto-rows: 1fr;
+      gap: 16px;
+      margin-bottom: 48px;
+      animation: up 1s cubic-bezier(.16,1,.3,1) 0.15s both;
+    }
 
-/* INSPIRE MODAL */
-.modal-overlay { position:fixed; inset:0; z-index:100; background:rgba(15,6,32,0.85); backdrop-filter:blur(12px); display:flex; align-items:center; justify-content:center; padding:24px; opacity:0; pointer-events:none; transition:opacity .4s; }
-.modal-overlay.on { opacity:1; pointer-events:all; }
-.modal { background:rgba(26,10,46,0.98); border:1px solid rgba(245,158,11,0.3); border-radius:24px; padding:48px 44px; max-width:520px; width:100%; text-align:center; position:relative; box-shadow:0 0 80px rgba(245,158,11,0.08),0 40px 80px rgba(0,0,0,0.6); }
-.modal::before { content:’’; position:absolute; top:0; left:10%; right:10%; height:1px; background:linear-gradient(90deg,transparent,var(–gold-glow),transparent); }
-.modal-gem { font-size:1.8rem; color:var(–gold-light); filter:drop-shadow(0 0 14px var(–gold-glow)); margin-bottom:16px; display:block; }
-.modal-title { font-family:‘Cinzel’,serif; font-size:1rem; font-weight:500; color:var(–white); margin-bottom:10px; letter-spacing:0.06em; }
-.modal-sub { font-family:‘Cormorant Garamond’,serif; font-style:italic; font-size:1rem; color:var(–muted); margin-bottom:28px; line-height:1.7; }
-.modal-input { width:100%; background:rgba(45,20,86,0.5); border:1px solid rgba(245,158,11,0.25); border-radius:14px; padding:16px 20px; color:var(–white); font-family:‘Raleway’,sans-serif; font-size:0.9rem; font-weight:300; line-height:1.6; resize:none; outline:none; min-height:90px; caret-color:var(–gold); margin-bottom:20px; transition:border-color .3s; }
-.modal-input::placeholder { color:var(–muted2); font-style:italic; }
-.modal-input:focus { border-color:rgba(245,158,11,0.5); }
-.modal-actions { display:flex; gap:12px; justify-content:center; }
-.btn-modal-go { display:inline-flex; align-items:center; gap:8px; padding:14px 36px; border-radius:100px; border:1px solid rgba(255,255,255,0.6); background:rgba(88,28,135,0.85); color:#ffffff; font-family:‘Cinzel’,serif; font-size:0.62rem; letter-spacing:0.2em; text-transform:uppercase; cursor:pointer; transition:all .35s; }
-.btn-modal-go:hover { border-color:var(–gold); background:rgba(107,33,168,0.9); transform:translateY(-2px); box-shadow:0 0 30px rgba(245,158,11,0.15); }
-.btn-modal-go:disabled { opacity:0.5; cursor:not-allowed; transform:none; }
-.btn-modal-cancel { background:transparent; border:1px solid rgba(255,255,255,0.3); color:#ffffff; font-family:‘Cinzel’,serif; font-size:0.58rem; letter-spacing:0.18em; text-transform:uppercase; padding:14px 24px; border-radius:100px; cursor:pointer; transition:all .3s; }
-.btn-modal-cancel:hover { border-color:var(–border-h); color:var(–gold); }
-.modal-loading { display:none; font-family:‘Cormorant Garamond’,serif; font-style:italic; color:var(–muted); font-size:0.95rem; margin-top:16px; }
-.modal-loading.on { display:block; }
+    @media (max-width: 560px) {
+      .grid { grid-template-columns: 1fr; grid-auto-rows: auto; }
+    }
 
-.err { text-align:center; padding:14px 20px; background:rgba(200,50,50,0.08); border:1px solid rgba(200,50,50,0.2); border-radius:14px; color:rgba(255,160,160,0.9); font-size:0.82rem; margin-top:18px; display:none; }
-.err.on { display:block; }
+    .field {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.35);
+      border-radius: var(--r);
+      padding: 22px 24px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      transition: border-color .3s, background .3s, box-shadow .3s;
+      position: relative;
+      overflow: hidden;
+    }
 
-/* LOADING */
-#loading { display:none; text-align:center; padding:130px 0; }
-#loading.on { display:block; animation:up .6s ease both; }
-.orb-wrap { position:relative; width:80px; height:80px; margin:0 auto 32px; }
-.orb { width:80px; height:80px; border-radius:50%; background:radial-gradient(circle at 35% 35%,rgba(200,140,255,0.95) 0%,rgba(107,33,168,0.7) 40%,rgba(45,10,100,0.4) 70%,transparent 100%); animation:pulse 2.2s ease-in-out infinite; box-shadow:0 0 30px rgba(124,58,237,0.5),0 0 80px rgba(124,58,237,0.2); }
-.orb-ring { position:absolute; inset:-10px; border-radius:50%; border:1px solid rgba(147,51,234,0.35); animation:ring 2.2s ease-in-out infinite; }
-.orb-ring2 { position:absolute; inset:-24px; border-radius:50%; border:1px solid rgba(147,51,234,0.15); animation:ring 2.2s ease-in-out .5s infinite; }
-@keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.14);box-shadow:0 0 70px rgba(124,58,237,0.6)} }
-@keyframes ring { 0%{transform:scale(1);opacity:.7} 100%{transform:scale(1.6);opacity:0} }
-.load-txt { font-family:‘Cormorant Garamond’,serif; font-style:italic; color:var(–muted); font-size:1.15rem; }
+    .field::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border-h), transparent);
+      opacity: 0;
+      transition: opacity .3s;
+    }
 
-/* BOARD */
-#board { display:none; }
-#board.on { display:block; animation:up .9s cubic-bezier(.16,1,.3,1) both; }
+    .field:focus-within::before { opacity: 1; }
 
-.board-hdr { text-align:center; margin-bottom:52px; }
-.board-eye { font-family:‘Cinzel’,serif; font-size:0.58rem; letter-spacing:0.3em; text-transform:uppercase; color:var(–gold); text-shadow:0 0 16px var(–gold-glow); margin-bottom:20px; }
-.board-title { font-family:‘Cormorant Garamond’,serif; font-style:italic; font-weight:300; font-size:clamp(1.9rem,4vw,3rem); line-height:1.2; color:var(–white); margin-bottom:14px; }
-.board-sub { font-family:‘Cormorant Garamond’,serif; font-style:italic; font-size:1rem; color:var(–muted); }
+    .field:focus-within {
+      border-color: rgba(255,255,255,0.6);
+      background: rgba(255,255,255,0.1);
+      box-shadow: 0 0 20px rgba(255,255,255,0.08);
+    }
 
-/* IMAGE VISION BOARD GRID */
-.vision-grid {
-display:grid;
-grid-template-columns: 2fr 1fr 1fr;
-grid-template-rows: 240px 240px;
-gap:10px;
-margin-bottom:28px;
-align-items: stretch;
-}
-@media(max-width:600px){
-.vision-grid { grid-template-columns:1fr 1fr; grid-template-rows:160px 160px 160px 160px; }
-.vision-tile:first-child { grid-column:1/3; }
-.vision-tile:last-child { grid-column:1/3; }
-}
+    .field-top { display: flex; align-items: center; gap: 10px; }
+    .field-ico { font-size: 1.4rem; flex-shrink: 0; }
 
-.vision-tile {
-position:relative; overflow:hidden;
-border-radius:16px;
-border:1px solid var(–border);
-cursor:pointer;
-transition:transform .3s, box-shadow .3s;
-}
-.vision-tile:first-child { grid-row:1/3; }
-.vision-tile:hover { transform:scale(1.02); box-shadow:0 8px 40px rgba(245,158,11,0.15); }
+    .field-lbl {
+      font-family: 'Cinzel', serif;
+      font-size: 0.6rem;
+      font-weight: 400;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      text-shadow: 0 0 10px var(--gold-glow);
+    }
 
-.vision-tile img { width:100%; height:100%; object-fit:cover; display:block; transition:transform .6s; }
-.vision-tile:hover img { transform:scale(1.08); }
+    .field textarea {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: var(--white);
+      font-family: 'Raleway', sans-serif;
+      font-weight: 300;
+      font-size: 0.88rem;
+      line-height: 1.65;
+      resize: none;
+      width: 100%;
+      min-height: 68px;
+      caret-color: var(--gold);
+    }
 
-/* Dark purple gradient overlay */
-.vision-tile::before {
-content:’’; position:absolute; inset:0; z-index:1;
-background:linear-gradient(to top, rgba(26,10,46,0.92) 0%, rgba(26,10,46,0.4) 45%, rgba(88,28,180,0.15) 100%);
-}
+    .field textarea::placeholder { color: var(--muted2); font-style: italic; }
 
-.tile-content {
-position:absolute; bottom:0; left:0; right:0; z-index:2;
-padding:20px 18px 16px;
-}
-.tile-emoji { font-size:1.4rem; display:block; margin-bottom:6px; filter:drop-shadow(0 0 8px rgba(0,0,0,0.8)); }
-.tile-cat {
-font-family:‘Cinzel’,serif; font-size:0.5rem;
-letter-spacing:0.2em; text-transform:uppercase;
-color:var(–gold); text-shadow:0 0 10px var(–gold-glow);
-margin-bottom:6px; display:block;
-}
-.tile-aff {
-font-family:‘Cormorant Garamond’,serif; font-style:italic;
-font-size:0.88rem; line-height:1.5; color:#fff;
-text-shadow:0 2px 12px rgba(0,0,0,0.9);
-}
-.vision-tile:first-child .tile-aff { font-size:1.05rem; line-height:1.55; }
+    .cta-wrap { text-align: center; animation: up 1s cubic-bezier(.16,1,.3,1) 0.22s both; }
 
-/* Upload button */
-.upload-btn {
-position:absolute; top:12px; right:12px; z-index:3;
-background:rgba(26,10,46,0.75); border:1px solid var(–border);
-border-radius:100px; padding:6px 12px;
-color:var(–gold); font-family:‘Cinzel’,serif;
-font-size:0.48rem; letter-spacing:0.15em; text-transform:uppercase;
-cursor:pointer; opacity:0; transition:opacity .3s;
-backdrop-filter:blur(8px);
-}
-.vision-tile:hover .upload-btn { opacity:1; }
-.upload-input { display:none; }
+    .btn-main {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 20px 60px;
+      border-radius: 100px;
+      border: 2px solid rgba(255,255,255,0.8);
+      background: rgba(255,255,255,0.05);
+      color: #ffffff;
+      font-family: 'Cinzel', serif;
+      font-size: 0.7rem;
+      font-weight: 400;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      cursor: pointer;
+      overflow: hidden;
+      transition: all .45s cubic-bezier(.16,1,.3,1);
+      box-shadow: 0 0 30px rgba(245,158,11,0.06);
+    }
 
-/* Placeholder when no image */
-.tile-placeholder {
-width:100%; height:100%;
-background:linear-gradient(135deg, var(–mid-purple), rgba(88,28,135,0.6));
-display:flex; align-items:center; justify-content:center;
-font-size:2.5rem;
-}
+    .btn-main::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 60%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent);
+      transition: left .65s;
+    }
 
-/* MANTRA */
-.mantra {
-background:var(–card-bg);
-border:1px solid rgba(245,158,11,0.3);
-border-radius:var(–r); padding:52px 44px;
-text-align:center; margin-bottom:32px;
-position:relative; overflow:hidden;
-backdrop-filter:blur(16px);
-box-shadow:0 0 60px rgba(245,158,11,0.05);
-animation:up .7s cubic-bezier(.16,1,.3,1) .5s both;
-}
-.mantra::before { content:’’; position:absolute; top:0; left:5%; right:5%; height:1px; background:linear-gradient(90deg,transparent,var(–gold-glow),transparent); }
-.mantra::after { content:’’; position:absolute; bottom:0; left:5%; right:5%; height:1px; background:linear-gradient(90deg,transparent,var(–gold-glow),transparent); }
-.m-corner { position:absolute; font-size:0.75rem; color:var(–gold); opacity:0.4; filter:drop-shadow(0 0 6px var(–gold-glow)); }
-.m-corner.tl{top:16px;left:20px} .m-corner.tr{top:16px;right:20px}
-.m-corner.bl{bottom:16px;left:20px} .m-corner.br{bottom:16px;right:20px}
-.mantra-gem { display:block; font-size:1.5rem; color:var(–gold-light); filter:drop-shadow(0 0 14px var(–gold-glow)); margin-bottom:16px; animation:float 5s ease-in-out 1s infinite; }
-.mantra-lbl { font-family:‘Cinzel’,serif; font-size:0.56rem; letter-spacing:0.28em; text-transform:uppercase; color:var(–gold); text-shadow:0 0 12px var(–gold-glow); margin-bottom:24px; }
-.mantra-txt { font-family:‘Cormorant Garamond’,serif; font-style:italic; font-weight:300; font-size:clamp(1.1rem,2.4vw,1.4rem); line-height:1.85; color:var(–white); max-width:580px; margin:0 auto; }
+    .btn-main:hover::before { left: 150%; }
 
-/* ACTIONS */
-.actions { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; animation:up .6s ease .65s both; }
-.btn-ghost { background:transparent; border:1px solid rgba(255,255,255,0.35); color:#ffffff; font-family:‘Cinzel’,serif; font-size:0.56rem; letter-spacing:0.2em; text-transform:uppercase; padding:13px 30px; border-radius:100px; cursor:pointer; transition:all .3s; }
-.btn-ghost:hover { border-color:#ffffff; color:#ffffff; box-shadow:0 0 20px rgba(255,255,255,0.1); }
+    .btn-main:hover {
+      border-color: #ffffff;
+      background: rgba(255,255,255,0.12);
+      color: #fff;
+      transform: translateY(-3px);
+      box-shadow: 0 0 40px rgba(255,255,255,0.15), 0 16px 40px rgba(0,0,0,0.5);
+      letter-spacing: 0.32em;
+    }
 
-/* FOOTER */
-.footer { text-align:center; margin-top:90px; padding-top:30px; border-top:1px solid var(–border); }
-.footer p { font-family:‘Cormorant Garamond’,serif; font-style:italic; color:#3b1a6b; font-size:0.86rem; font-weight:500; }
-.footer strong { color:rgba(245,158,11,0.6); font-style:normal; font-weight:400; }
+    .btn-main span { position: relative; z-index: 1; }
 
-@keyframes up { from{opacity:0;transform:translateY(26px)} to{opacity:1;transform:translateY(0)} }
+    .cta-hint {
+      margin-top: 16px;
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 0.88rem;
+      color: var(--muted2);
+    }
 
-@media print {
-#cosmos,#starfield,.actions,.footer,.upload-btn{display:none}
-body{background:#1a0a2e !important}
-.page{padding:20px}
-}
-</style>
+    .inspire-wrap { text-align: center; margin-bottom: 28px; animation: up 1s cubic-bezier(.16,1,.3,1) 0.08s both; }
 
+    .btn-inspire {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 13px 36px;
+      border-radius: 100px;
+      border: 1px solid rgba(255,255,255,0.6);
+      background: transparent;
+      color: #ffffff;
+      font-family: 'Cinzel', serif;
+      font-size: 0.62rem;
+      font-weight: 400;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all .35s;
+    }
+
+    .btn-inspire:hover {
+      background: rgba(255,255,255,0.08);
+      border-color: #ffffff;
+      box-shadow: 0 0 20px rgba(255,255,255,0.1);
+      transform: translateY(-2px);
+    }
+
+    .inspire-hint {
+      margin-top: 10px;
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 0.82rem;
+      color: #ffffff;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      background: rgba(15,6,32,0.85);
+      backdrop-filter: blur(12px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .4s;
+    }
+
+    .modal-overlay.on { opacity: 1; pointer-events: all; }
+
+    .modal {
+      background: rgba(26,10,46,0.98);
+      border: 1px solid rgba(245,158,11,0.3);
+      border-radius: 24px;
+      padding: 48px 44px;
+      max-width: 520px;
+      width: 100%;
+      text-align: center;
+      position: relative;
+      box-shadow: 0 0 80px rgba(245,158,11,0.08), 0 40px 80px rgba(0,0,0,0.6);
+    }
+
+    .modal::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 10%;
+      right: 10%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold-glow), transparent);
+    }
+
+    .modal-gem {
+      font-size: 1.8rem;
+      color: var(--gold-light);
+      filter: drop-shadow(0 0 14px var(--gold-glow));
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .modal-title {
+      font-family: 'Cinzel', serif;
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--white);
+      margin-bottom: 10px;
+      letter-spacing: 0.06em;
+    }
+
+    .modal-sub {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 1rem;
+      color: var(--muted);
+      margin-bottom: 28px;
+      line-height: 1.7;
+    }
+
+    .modal-input {
+      width: 100%;
+      background: rgba(45,20,86,0.5);
+      border: 1px solid rgba(245,158,11,0.25);
+      border-radius: 14px;
+      padding: 16px 20px;
+      color: var(--white);
+      font-family: 'Raleway', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 300;
+      line-height: 1.6;
+      resize: none;
+      outline: none;
+      min-height: 90px;
+      caret-color: var(--gold);
+      margin-bottom: 20px;
+      transition: border-color .3s;
+    }
+
+    .modal-input::placeholder { color: var(--muted2); font-style: italic; }
+    .modal-input:focus { border-color: rgba(245,158,11,0.5); }
+
+    .modal-actions { display: flex; gap: 12px; justify-content: center; }
+
+    .btn-modal-go {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 36px;
+      border-radius: 100px;
+      border: 1px solid rgba(255,255,255,0.6);
+      background: rgba(88,28,135,0.85);
+      color: #ffffff;
+      font-family: 'Cinzel', serif;
+      font-size: 0.62rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all .35s;
+    }
+
+    .btn-modal-go:hover {
+      border-color: var(--gold);
+      background: rgba(107,33,168,0.9);
+      transform: translateY(-2px);
+      box-shadow: 0 0 30px rgba(245,158,11,0.15);
+    }
+
+    .btn-modal-go:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+    .btn-modal-cancel {
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.3);
+      color: #ffffff;
+      font-family: 'Cinzel', serif;
+      font-size: 0.58rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      padding: 14px 24px;
+      border-radius: 100px;
+      cursor: pointer;
+      transition: all .3s;
+    }
+
+    .btn-modal-cancel:hover { border-color: var(--border-h); color: var(--gold); }
+
+    .modal-loading {
+      display: none;
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      color: var(--muted);
+      font-size: 0.95rem;
+      margin-top: 16px;
+    }
+
+    .modal-loading.on { display: block; }
+
+    .err {
+      text-align: center;
+      padding: 14px 20px;
+      background: rgba(200,50,50,0.08);
+      border: 1px solid rgba(200,50,50,0.2);
+      border-radius: 14px;
+      color: rgba(255,160,160,0.9);
+      font-size: 0.82rem;
+      margin-top: 18px;
+      display: none;
+    }
+
+    .err.on { display: block; }
+
+    #loading { display: none; text-align: center; padding: 130px 0; }
+    #loading.on { display: block; animation: up .6s ease both; }
+
+    .orb-wrap { position: relative; width: 80px; height: 80px; margin: 0 auto 32px; }
+
+    .orb {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, rgba(200,140,255,0.95) 0%, rgba(107,33,168,0.7) 40%, rgba(45,10,100,0.4) 70%, transparent 100%);
+      animation: pulse 2.2s ease-in-out infinite;
+      box-shadow: 0 0 30px rgba(124,58,237,0.5), 0 0 80px rgba(124,58,237,0.2);
+    }
+
+    .orb-ring {
+      position: absolute;
+      inset: -10px;
+      border-radius: 50%;
+      border: 1px solid rgba(147,51,234,0.35);
+      animation: ring 2.2s ease-in-out infinite;
+    }
+
+    .orb-ring2 {
+      position: absolute;
+      inset: -24px;
+      border-radius: 50%;
+      border: 1px solid rgba(147,51,234,0.15);
+      animation: ring 2.2s ease-in-out .5s infinite;
+    }
+
+    @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.14); box-shadow: 0 0 70px rgba(124,58,237,0.6); } }
+    @keyframes ring { 0% { transform: scale(1); opacity: .7; } 100% { transform: scale(1.6); opacity: 0; } }
+
+    .load-txt {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      color: var(--muted);
+      font-size: 1.15rem;
+    }
+
+    #board { display: none; }
+    #board.on { display: block; animation: up .9s cubic-bezier(.16,1,.3,1) both; }
+
+    .board-hdr { text-align: center; margin-bottom: 52px; }
+
+    .board-eye {
+      font-family: 'Cinzel', serif;
+      font-size: 0.58rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      text-shadow: 0 0 16px var(--gold-glow);
+      margin-bottom: 20px;
+    }
+
+    .board-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-weight: 300;
+      font-size: clamp(1.9rem, 4vw, 3rem);
+      line-height: 1.2;
+      color: var(--white);
+      margin-bottom: 14px;
+    }
+
+    .board-sub {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 1rem;
+      color: var(--muted);
+    }
+
+    .vision-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      grid-template-rows: 240px 240px;
+      gap: 10px;
+      margin-bottom: 28px;
+      align-items: stretch;
+    }
+
+    @media (max-width: 600px) {
+      .vision-grid {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 160px 160px 160px 160px;
+      }
+      .vision-tile:first-child { grid-column: 1 / 3; }
+      .vision-tile:last-child { grid-column: 1 / 3; }
+    }
+
+    .vision-tile {
+      position: relative;
+      overflow: hidden;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: transform .3s, box-shadow .3s;
+    }
+
+    .vision-tile:first-child { grid-row: 1 / 3; }
+
+    .vision-tile:hover {
+      transform: scale(1.02);
+      box-shadow: 0 8px 40px rgba(245,158,11,0.15);
+    }
+
+    .vision-tile img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform .6s;
+    }
+
+    .vision-tile:hover img { transform: scale(1.08); }
+
+    .vision-tile::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background: linear-gradient(to top, rgba(26,10,46,0.92) 0%, rgba(26,10,46,0.4) 45%, rgba(88,28,180,0.15) 100%);
+    }
+
+    .tile-content {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 2;
+      padding: 20px 18px 16px;
+    }
+
+    .tile-emoji {
+      font-size: 1.4rem;
+      display: block;
+      margin-bottom: 6px;
+      filter: drop-shadow(0 0 8px rgba(0,0,0,0.8));
+    }
+
+    .tile-cat {
+      font-family: 'Cinzel', serif;
+      font-size: 0.5rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      text-shadow: 0 0 10px var(--gold-glow);
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    .tile-aff {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 0.88rem;
+      line-height: 1.5;
+      color: #fff;
+      text-shadow: 0 2px 12px rgba(0,0,0,0.9);
+    }
+
+    .vision-tile:first-child .tile-aff { font-size: 1.05rem; line-height: 1.55; }
+
+    .upload-btn {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      z-index: 3;
+      background: rgba(26,10,46,0.75);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      padding: 6px 12px;
+      color: var(--gold);
+      font-family: 'Cinzel', serif;
+      font-size: 0.48rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity .3s;
+      backdrop-filter: blur(8px);
+    }
+
+    .vision-tile:hover .upload-btn { opacity: 1; }
+    .upload-input { display: none; }
+
+    .tile-placeholder {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, var(--mid-purple), rgba(88,28,135,0.6));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+    }
+
+    .mantra {
+      background: var(--card-bg);
+      border: 1px solid rgba(245,158,11,0.3);
+      border-radius: var(--r);
+      padding: 52px 44px;
+      text-align: center;
+      margin-bottom: 32px;
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 0 60px rgba(245,158,11,0.05);
+      animation: up .7s cubic-bezier(.16,1,.3,1) .5s both;
+    }
+
+    .mantra::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 5%;
+      right: 5%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold-glow), transparent);
+    }
+
+    .mantra::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 5%;
+      right: 5%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold-glow), transparent);
+    }
+
+    .m-corner {
+      position: absolute;
+      font-size: 0.75rem;
+      color: var(--gold);
+      opacity: 0.4;
+      filter: drop-shadow(0 0 6px var(--gold-glow));
+    }
+
+    .m-corner.tl { top: 16px; left: 20px; }
+    .m-corner.tr { top: 16px; right: 20px; }
+    .m-corner.bl { bottom: 16px; left: 20px; }
+    .m-corner.br { bottom: 16px; right: 20px; }
+
+    .mantra-gem {
+      display: block;
+      font-size: 1.5rem;
+      color: var(--gold-light);
+      filter: drop-shadow(0 0 14px var(--gold-glow));
+      margin-bottom: 16px;
+      animation: float 5s ease-in-out 1s infinite;
+    }
+
+    .mantra-lbl {
+      font-family: 'Cinzel', serif;
+      font-size: 0.56rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--gold);
+      text-shadow: 0 0 12px var(--gold-glow);
+      margin-bottom: 24px;
+    }
+
+    .mantra-txt {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-weight: 300;
+      font-size: clamp(1.1rem,2.4vw,1.4rem);
+      line-height: 1.85;
+      color: var(--white);
+      max-width: 580px;
+      margin: 0 auto;
+    }
+
+    .actions {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+      animation: up .6s ease .65s both;
+    }
+
+    .btn-ghost {
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.35);
+      color: #ffffff;
+      font-family: 'Cinzel', serif;
+      font-size: 0.56rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 13px 30px;
+      border-radius: 100px;
+      cursor: pointer;
+      transition: all .3s;
+    }
+
+    .btn-ghost:hover {
+      border-color: #ffffff;
+      color: #ffffff;
+      box-shadow: 0 0 20px rgba(255,255,255,0.1);
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 90px;
+      padding-top: 30px;
+      border-top: 1px solid var(--border);
+    }
+
+    .footer p {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      color: #3b1a6b;
+      font-size: 0.86rem;
+      font-weight: 500;
+    }
+
+    .footer strong {
+      color: rgba(245,158,11,0.6);
+      font-style: normal;
+      font-weight: 400;
+    }
+
+    @keyframes up { from { opacity: 0; transform: translateY(26px); } to { opacity: 1; transform: translateY(0); } }
+
+    @media print {
+      #cosmos, #starfield, .actions, .footer, .upload-btn { display: none; }
+      body { background: #1a0a2e !important; }
+      .page { padding: 20px; }
+    }
+  </style>
 </head>
 <body>
+  <div id="cosmos"></div>
+  <div id="starfield"></div>
 
-<div id="cosmos"></div>
-<div id="starfield"></div>
-
-<div class="page">
-
-  <header class="hdr">
-    <span class="crown">✦</span>
-    <p class="hdr-eye">A Mindvalley Experience</p>
-    <h1>
-      Design Your
-      <span class="hdr-italic">Extraordinary Life</span>
-    </h1>
-    <div class="ornament">
-      <div class="orn-line"></div>
-      <span class="orn-gems">✦ ✦ ✦</span>
-      <div class="orn-line r"></div>
-    </div>
-    <p class="hdr-sub">Describe the life you are calling in. Your vision board will come alive with images and affirmations crafted just for you.</p>
-  </header>
-
-  <section id="formSection">
-    <div class="inspire-wrap">
-      <button class="btn-inspire" onclick="openInspire()">✨ &nbsp; Inspire Me &nbsp; ✨</button>
-      <p class="inspire-hint">Not sure what to write? Let AI fill it in for you</p>
-    </div>
-    <div class="divider"><span>Six Dimensions of Your Extraordinary Life</span></div>
-
-```
-<div class="grid">
-  <div class="field">
-    <div class="field-top">
-      <span class="field-ico">💫</span>
-      <span class="field-lbl">Mind &amp; Growth</span>
-    </div>
-    <textarea id="mind" placeholder="e.g. master focus, expand consciousness, think with clarity…"></textarea>
-  </div>
-  <div class="field">
-    <div class="field-top">
-      <span class="field-ico">❤️</span>
-      <span class="field-lbl">Love &amp; Relationships</span>
-    </div>
-    <textarea id="love" placeholder="e.g. soulmate connection, loyal tribe, deep intimacy…"></textarea>
-  </div>
-  <div class="field">
-    <div class="field-top">
-      <span class="field-ico">🌿</span>
-      <span class="field-lbl">Health &amp; Vitality</span>
-    </div>
-    <textarea id="health" placeholder="e.g. strong body, boundless energy, radiant wellbeing…"></textarea>
-  </div>
-  <div class="field">
-    <div class="field-top">
-      <span class="field-ico">💎</span>
-      <span class="field-lbl">Money &amp; Abundance</span>
-    </div>
-    <textarea id="money" placeholder="e.g. financial freedom, multiple streams, generosity…"></textarea>
-  </div>
-  <div class="field">
-    <div class="field-top">
-      <span class="field-ico">🚀</span>
-      <span class="field-lbl">Mission &amp; Career</span>
-    </div>
-    <textarea id="career" placeholder="e.g. build a movement, lead with purpose, create impact…"></textarea>
-  </div>
-  <div class="field">
-    <div class="field-top">
-      <span class="field-ico">🌍</span>
-      <span class="field-lbl">Adventure &amp; Life</span>
-    </div>
-    <textarea id="adventure" placeholder="e.g. travel everywhere, live fully, collect memories…"></textarea>
-  </div>
-</div>
-
-<div class="cta-wrap">
-  <button class="btn-main" onclick="generate()">
-    <span>✦ &nbsp; Manifest My Vision Board &nbsp; ✦</span>
-  </button>
-  <p class="cta-hint">Your extraordinary vision awaits</p>
-</div>
-<div class="err" id="err">Please fill in at least one area of your vision to begin.</div>
-```
-
-  </section>
-
-  <div id="loading">
-    <div class="orb-wrap">
-      <div class="orb"></div>
-      <div class="orb-ring"></div>
-      <div class="orb-ring2"></div>
-    </div>
-    <p class="load-txt">The universe is weaving your vision into form…</p>
-  </div>
-
-  <section id="board">
-    <div class="board-hdr">
-      <p class="board-eye">✦ &nbsp; Your Vision Board &nbsp; ✦</p>
-      <h2 class="board-title" id="bTitle"></h2>
-      <p class="board-sub" id="bSub"></p>
-    </div>
-
-```
-<div class="vision-grid" id="visionGrid"></div>
-
-<div class="mantra">
-  <span class="m-corner tl">✦</span><span class="m-corner tr">✦</span>
-  <span class="m-corner bl">✦</span><span class="m-corner br">✦</span>
-  <span class="mantra-gem">✦</span>
-  <p class="mantra-lbl">Your Personal Mantra</p>
-  <p class="mantra-txt" id="mantraTxt"></p>
-</div>
-
-<div class="actions">
-  <button class="btn-ghost" onclick="window.print()">Save as PDF</button>
-  <button class="btn-ghost" onclick="copyMantra()">Copy Mantra</button>
-  <button class="btn-ghost" onclick="resetBoard()">Start Again</button>
-</div>
-```
-
-  </section>
-
-  <footer class="footer">
-    <p>Built with intention by <strong>Fay</strong> &nbsp;·&nbsp; Inspired by <strong>Mindvalley</strong></p>
-  </footer>
-
-  <!-- INSPIRE MODAL -->
-
-  <div class="modal-overlay" id="inspireModal">
-    <div class="modal">
-      <span class="modal-gem">✨</span>
-      <h3 class="modal-title">Let the Universe Inspire You</h3>
-      <p class="modal-sub">Describe your dream life in one sentence.<br/>How does it feel? What does it look like?</p>
-      <textarea class="modal-input" id="inspireInput" placeholder="e.g. I wake up free, abundant and deeply in love with the life I have built…"></textarea>
-      <div class="modal-actions">
-        <button class="btn-modal-cancel" onclick="closeInspire()">Cancel</button>
-        <button class="btn-modal-go" id="inspireGoBtn" onclick="runInspire()">✦ &nbsp; Fill My Vision</button>
+  <div class="page">
+    <header class="hdr">
+      <span class="crown">✦</span>
+      <p class="hdr-eye">A Mindvalley Experience</p>
+      <h1>
+        Design Your
+        <span class="hdr-italic">Extraordinary Life</span>
+      </h1>
+      <div class="ornament">
+        <div class="orn-line"></div>
+        <span class="orn-gems">✦ ✦ ✦</span>
+        <div class="orn-line r"></div>
       </div>
-      <p class="modal-loading" id="inspireLoading">✨ Claude is feeling your vision…</p>
+      <p class="hdr-sub">Describe the life you are calling in. Your vision board will come alive with images and affirmations crafted just for you.</p>
+    </header>
+
+    <section id="formSection">
+      <div class="inspire-wrap">
+        <button class="btn-inspire" onclick="openInspire()">✨ &nbsp; Inspire Me &nbsp; ✨</button>
+        <p class="inspire-hint">Not sure what to write? Let AI fill it in for you</p>
+      </div>
+
+      <div class="divider"><span>Six Dimensions of Your Extraordinary Life</span></div>
+
+      <div class="grid">
+        <div class="field">
+          <div class="field-top">
+            <span class="field-ico">💫</span>
+            <span class="field-lbl">Mind &amp; Growth</span>
+          </div>
+          <textarea id="mind" placeholder="e.g. master focus, expand consciousness, think with clarity…"></textarea>
+        </div>
+
+        <div class="field">
+          <div class="field-top">
+            <span class="field-ico">❤️</span>
+            <span class="field-lbl">Love &amp; Relationships</span>
+          </div>
+          <textarea id="love" placeholder="e.g. soulmate connection, loyal tribe, deep intimacy…"></textarea>
+        </div>
+
+        <div class="field">
+          <div class="field-top">
+            <span class="field-ico">🌿</span>
+            <span class="field-lbl">Health &amp; Vitality</span>
+          </div>
+          <textarea id="health" placeholder="e.g. strong body, boundless energy, radiant wellbeing…"></textarea>
+        </div>
+
+        <div class="field">
+          <div class="field-top">
+            <span class="field-ico">💎</span>
+            <span class="field-lbl">Money &amp; Abundance</span>
+          </div>
+          <textarea id="money" placeholder="e.g. financial freedom, multiple streams, generosity…"></textarea>
+        </div>
+
+        <div class="field">
+          <div class="field-top">
+            <span class="field-ico">🚀</span>
+            <span class="field-lbl">Mission &amp; Career</span>
+          </div>
+          <textarea id="career" placeholder="e.g. build a movement, lead with purpose, create impact…"></textarea>
+        </div>
+
+        <div class="field">
+          <div class="field-top">
+            <span class="field-ico">🌍</span>
+            <span class="field-lbl">Adventure &amp; Life</span>
+          </div>
+          <textarea id="adventure" placeholder="e.g. travel everywhere, live fully, collect memories…"></textarea>
+        </div>
+      </div>
+
+      <div class="cta-wrap">
+        <button class="btn-main" onclick="generate()">
+          <span>✦ &nbsp; Manifest My Vision Board &nbsp; ✦</span>
+        </button>
+        <p class="cta-hint">Your extraordinary vision awaits</p>
+      </div>
+
+      <div class="err" id="err">Please fill in at least one area of your vision to begin.</div>
+    </section>
+
+    <div id="loading">
+      <div class="orb-wrap">
+        <div class="orb"></div>
+        <div class="orb-ring"></div>
+        <div class="orb-ring2"></div>
+      </div>
+      <p class="load-txt">The universe is weaving your vision into form…</p>
+    </div>
+
+    <section id="board">
+      <div class="board-hdr">
+        <p class="board-eye">✦ &nbsp; Your Vision Board &nbsp; ✦</p>
+        <h2 class="board-title" id="bTitle"></h2>
+        <p class="board-sub" id="bSub"></p>
+      </div>
+
+      <div class="vision-grid" id="visionGrid"></div>
+
+      <div class="mantra">
+        <span class="m-corner tl">✦</span><span class="m-corner tr">✦</span>
+        <span class="m-corner bl">✦</span><span class="m-corner br">✦</span>
+        <span class="mantra-gem">✦</span>
+        <p class="mantra-lbl">Your Personal Mantra</p>
+        <p class="mantra-txt" id="mantraTxt"></p>
+      </div>
+
+      <div class="actions">
+        <button class="btn-ghost" onclick="window.print()">Save as PDF</button>
+        <button class="btn-ghost" onclick="copyMantra()">Copy Mantra</button>
+        <button class="btn-ghost" onclick="resetBoard()">Start Again</button>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <p>Built with intention by <strong>Fay</strong> &nbsp;·&nbsp; Inspired by <strong>Mindvalley</strong></p>
+    </footer>
+
+    <div class="modal-overlay" id="inspireModal">
+      <div class="modal">
+        <span class="modal-gem">✨</span>
+        <h3 class="modal-title">Let the Universe Inspire You</h3>
+        <p class="modal-sub">Describe your dream life in one sentence.<br />How does it feel? What does it look like?</p>
+        <textarea class="modal-input" id="inspireInput" placeholder="e.g. I wake up free, abundant and deeply in love with the life I have built…"></textarea>
+        <div class="modal-actions">
+          <button class="btn-modal-cancel" onclick="closeInspire()">Cancel</button>
+          <button class="btn-modal-go" id="inspireGoBtn" onclick="runInspire()">✦ &nbsp; Fill My Vision</button>
+        </div>
+        <p class="modal-loading" id="inspireLoading">✨ Demo mode is shaping your vision…</p>
+      </div>
     </div>
   </div>
 
-</div>
+  <script>
+    const FIELDS = ['mind', 'love', 'health', 'money', 'career', 'adventure'];
 
-<script>
-
-const ANTHROPIC_KEY = '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;
-
-function openInspire(){ document.getElementById('inspireModal').classList.add('on'); document.getElementById('inspireInput').focus(); }
-function closeInspire(){ document.getElementById('inspireModal').classList.remove('on'); }
-
-async function runInspire(){
-  const dream = document.getElementById('inspireInput').value.trim();
-  if(!dream){ document.getElementById('inspireInput').focus(); return; }
-  const btn = document.getElementById('inspireGoBtn');
-  const loading = document.getElementById('inspireLoading');
-  btn.disabled = true;
-  loading.classList.add('on');
-
-  try {
-    const prompt = `You are a transformational life coach at Mindvalley. Someone described their dream life as: "${dream}"
-
-Based on this, write SHORT inspiring inputs (1 sentence each, max 10 words) for each of these 6 life areas. Return ONLY valid JSON, no markdown:
-{
-  "mind": "...",
-  "love": "...",
-  "health": "...",
-  "money": "...",
-  "career": "...",
-  "adventure": "..."
-}
-
-Make each one feel like a heartfelt personal dream. Use their language and energy.`;
-
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method:'POST',
-      headers:{ 'Content-Type':'application/json', 'x-api-key': ANTHROPIC_KEY, 'anthropic-version':'2023-06-01', 'anthropic-dangerous-direct-browser-access':'true' },
-      body: JSON.stringify({ model:'claude-sonnet-4-5', max_tokens:500, messages:[{role:'user',content:prompt}] })
-    });
-    const data = await res.json();
-    const text = data.content.map(b=>b.text||'').join('');
-    const clean = text.replace(/```json|```/g,'').trim();
-    const inputs = JSON.parse(clean);
-    FIELDS.forEach(f=>{ if(inputs[f]) document.getElementById(f).value = inputs[f]; });
-    closeInspire();
-  } catch(e) {
-    // Fallback if API not set up yet
-    const fallbacks = {
-      mind:'expand my consciousness and think with crystal clarity',
-      love:'attract a deep soulmate connection and loyal tribe',
-      health:'feel strong, radiant and full of boundless energy',
-      money:'build multiple income streams and live in true abundance',
-      career:'lead a movement that creates real impact in the world',
-      adventure:'travel freely and collect extraordinary life experiences'
+    const META = {
+      mind:      { label: 'Mind & Growth',        emoji: '💫' },
+      love:      { label: 'Love & Relationships', emoji: '❤️' },
+      health:    { label: 'Health & Vitality',    emoji: '🌿' },
+      money:     { label: 'Money & Abundance',    emoji: '💎' },
+      career:    { label: 'Mission & Career',     emoji: '🚀' },
+      adventure: { label: 'Adventure & Life',     emoji: '🌍' }
     };
-    FIELDS.forEach(f=>{ document.getElementById(f).value = fallbacks[f]; });
-    closeInspire();
-  } finally {
-    btn.disabled = false;
-    loading.classList.remove('on');
-  }
-}
 
-// Stars
-(function(){
-  const c=document.getElementById('starfield');
-  for(let i=0;i<150;i++){
-    const s=document.createElement('div'); s.className='star';
-    const sz=Math.random()*2.2+0.4;
-    s.style.cssText=`width:${sz}px;height:${sz}px;left:${Math.random()*100}%;top:${Math.random()*100}%;--d:${(Math.random()*5+2).toFixed(1)}s;animation-delay:-${(Math.random()*8).toFixed(1)}s;`;
-    c.appendChild(s);
-  }
-})();
+    const AFFIRMATIONS = {
+      mind: [
+        'My mind is a sovereign landscape — I cultivate clarity, depth and unshakeable vision with every breath I take.',
+        'I think in breakthroughs. My intellect is a sacred instrument I wield with precision and wonder.',
+        'I learn at the speed of inspiration. My consciousness expands into extraordinary new territories each day.'
+      ],
+      love: [
+        'I am a magnet for deep, soulful connection. Love flows to me and through me in its most extraordinary form.',
+        'My relationships are mirrors of my highest self — chosen with intention, nurtured with full presence.',
+        'I give and receive love without reservation. My heart is both anchor and sail.'
+      ],
+      health: [
+        'My body is a sacred vessel I honour with reverence. Vitality, strength and radiance are my natural state.',
+        'Every cell in my body vibrates with aliveness. Wellness is not a goal — it is the way I choose to live.',
+        'I move through the world with an energy that inspires. My physical form supports every dream I carry.'
+      ],
+      money: [
+        'Abundance is my natural state. Money flows to me as a reflection of the value I bring to the world.',
+        'I build wealth with purpose and share it with grace. Financial freedom is the canvas for my life\'s greatest work.',
+        'I am in a conscious relationship with prosperity. Every decision I make expands my freedom and impact.'
+      ],
+      career: [
+        'My work is my mission. I build things that matter, lead with vision and leave a mark that outlasts my presence.',
+        'I am a builder of futures. The work I do today becomes the world others step into tomorrow.',
+        'I don\'t chase success — I embody it. My purpose is my strategy and my impact is my legacy.'
+      ],
+      adventure: [
+        'I collect experiences like sacred treasures. The world is my greatest classroom and I am its most devoted student.',
+        'I say yes to life fully, boldly and without reservation. Every adventure expands who I am becoming.',
+        'I live at the edges of my comfort zone — that is precisely where my most extraordinary stories are written.'
+      ]
+    };
 
-const UNSPLASH_KEY = '-zK9KT2khT9iLwYcKYVtS5jGs7zz6kqQUrjfO7X4emM';
+    const TITLES = [
+      'The Architecture of My Extraordinary Life',
+      'A Vision Worthy of My One Wild Life',
+      'The Future I Am Already Living',
+      'The Life I Was Born to Build',
+      'My Blueprint for the Impossible Made Real'
+    ];
 
-const FIELDS = ['mind','love','health','money','career','adventure'];
-const META = {
-  mind:     {label:'Mind & Growth',       emoji:'💫', query:'meditation consciousness mindfulness clarity'},
-  love:     {label:'Love & Relationships',emoji:'❤️', query:'couple love connection soulmate'},
-  health:   {label:'Health & Vitality',   emoji:'🌿', query:'fitness wellness vitality healthy body'},
-  money:    {label:'Money & Abundance',   emoji:'💎', query:'abundance luxury wealth success'},
-  career:   {label:'Mission & Career',    emoji:'🚀', query:'leadership vision entrepreneur success'},
-  adventure:{label:'Adventure & Life',    emoji:'🌍', query:'travel adventure explore nature world'}
-};
+    const MANTRAS = [
+      'I am not waiting for my life to begin — it is unfolding now, in every choice, every breath, every bold act of becoming. I am the architect, the vision, and the living proof that an extraordinary life is not only possible — it is already mine.',
+      'Everything I desire is already in motion. I align my energy, sharpen my focus and take courageous action — knowing the universe moves with those who dare to live fully. I am worthy. I am ready. I am here.',
+      'My life is a masterpiece in deliberate progress. I hold my vision with certainty and my path with grace. I grow through everything and build something beautiful from all I am given.'
+    ];
 
-const AFFIRMATIONS = {
-  mind:["My mind is a sovereign landscape — I cultivate clarity, depth and unshakeable vision with every breath I take.","I think in breakthroughs. My intellect is a sacred instrument I wield with precision and wonder.","I learn at the speed of inspiration. My consciousness expands into extraordinary new territories each day."],
-  love:["I am a magnet for deep, soulful connection. Love flows to me and through me in its most extraordinary form.","My relationships are mirrors of my highest self — chosen with intention, nurtured with full presence.","I give and receive love without reservation. My heart is both anchor and sail."],
-  health:["My body is a sacred vessel I honour with reverence. Vitality, strength and radiance are my natural state.","Every cell in my body vibrates with aliveness. Wellness is not a goal — it is the way I choose to live.","I move through the world with an energy that inspires. My physical form supports every dream I carry."],
-  money:["Abundance is my natural state. Money flows to me as a reflection of the value I bring to the world.","I build wealth with purpose and share it with grace. Financial freedom is the canvas for my life's greatest work.","I am in a conscious relationship with prosperity. Every decision I make expands my freedom and impact."],
-  career:["My work is my mission. I build things that matter, lead with vision and leave a mark that outlasts my presence.","I am a builder of futures. The work I do today becomes the world others step into tomorrow.","I don't chase success — I embody it. My purpose is my strategy and my impact is my legacy."],
-  adventure:["I collect experiences like sacred treasures. The world is my greatest classroom and I am its most devoted student.","I say yes to life fully, boldly and without reservation. Every adventure expands who I am becoming.","I live at the edges of my comfort zone — that is precisely where my most extraordinary stories are written."]
-};
+    const DEMO_IMAGES = {
+      mind: [
+        'https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=1200&q=80',
+        'https://images.unsplash.com/photo-1519834785169-98be25ec3f84?auto=format&fit=crop&w=1200&q=80'
+      ],
+      love: [
+        'https://images.unsplash.com/photo-1516589091380-5d8e87df6999?auto=format&fit=crop&w=1200&q=80',
+        'https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=1200&q=80'
+      ],
+      health: [
+        'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=1200&q=80',
+        'https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=1200&q=80'
+      ],
+      money: [
+        'https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?auto=format&fit=crop&w=1200&q=80',
+        'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1200&q=80'
+      ],
+      career: [
+        'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1200&q=80',
+        'https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=1200&q=80'
+      ],
+      adventure: [
+        'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80',
+        'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80'
+      ]
+    };
 
-const TITLES=["The Architecture of My Extraordinary Life","A Vision Worthy of My One Wild Life","The Future I Am Already Living","The Life I Was Born to Build","My Blueprint for the Impossible Made Real"];
-const MANTRAS=["I am not waiting for my life to begin — it is unfolding now, in every choice, every breath, every bold act of becoming. I am the architect, the vision, and the living proof that an extraordinary life is not only possible — it is already mine.","Everything I desire is already in motion. I align my energy, sharpen my focus and take courageous action — knowing the universe moves with those who dare to live fully. I am worthy. I am ready. I am here.","My life is a masterpiece in deliberate progress. I hold my vision with certainty and my path with grace. I grow through everything and build something beautiful from all I am given."];
-const pick=a=>a[Math.floor(Math.random()*a.length)];
+    const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
 
-async function fetchImage(query){
-  try{
-    const r=await fetch(`https://api.unsplash.com/photos/random?query=${encodeURIComponent(query)}&orientation=landscape&client_id=${UNSPLASH_KEY}`);
-    const d=await r.json();
-    return d.urls?.regular||null;
-  }catch(e){return null;}
-}
-
-async function generate(){
-  let any=false;
-  FIELDS.forEach(f=>{if(document.getElementById(f).value.trim())any=true;});
-  if(!any){document.getElementById('err').classList.add('on');return;}
-  document.getElementById('err').classList.remove('on');
-  document.getElementById('formSection').style.display='none';
-  document.getElementById('loading').classList.add('on');
-
-  const imgs=await Promise.all(FIELDS.map(f=>{
-    const v=document.getElementById(f).value.trim();
-    return fetchImage(v?v+' '+META[f].query:META[f].query);
-  }));
-
-  const cards=FIELDS.map((f,i)=>({field:f,aff:pick(AFFIRMATIONS[f]),img:imgs[i]}));
-  renderBoard({title:pick(TITLES),sub:"Read this every morning. Feel it. Then go build it.",cards,mantra:pick(MANTRAS)});
-}
-
-function renderBoard(b){
-  document.getElementById('loading').classList.remove('on');
-  document.getElementById('bTitle').textContent=b.title;
-  document.getElementById('bSub').textContent=b.sub;
-  document.getElementById('mantraTxt').textContent=b.mantra;
-
-  const g=document.getElementById('visionGrid'); g.innerHTML='';
-  b.cards.forEach((c,i)=>{
-    const m=META[c.field];
-    const tile=document.createElement('div'); tile.className='vision-tile';
-    tile.style.cssText=`animation:up .8s cubic-bezier(.16,1,.3,1) ${i*0.1}s both;`;
-    if(c.img){
-      tile.innerHTML=`
-        <img src="${c.img}" alt="${m.label}"/>
-        <div class="tile-content">
-          <span class="tile-emoji">${m.emoji}</span>
-          <span class="tile-cat">${m.label}</span>
-          <p class="tile-aff">${c.aff}</p>
-        </div>
-        <label class="upload-btn">
-          ↑ Replace Photo
-          <input type="file" accept="image/*" class="upload-input" onchange="replaceImg(event,this)"/>
-        </label>`;
-    } else {
-      tile.innerHTML=`
-        <div class="tile-placeholder">${m.emoji}</div>
-        <div class="tile-content">
-          <span class="tile-emoji">${m.emoji}</span>
-          <span class="tile-cat">${m.label}</span>
-          <p class="tile-aff">${c.aff}</p>
-        </div>
-        <label class="upload-btn" style="opacity:1">
-          ↑ Add Photo
-          <input type="file" accept="image/*" class="upload-input" onchange="replaceImg(event,this)"/>
-        </label>`;
+    function openInspire() {
+      document.getElementById('inspireModal').classList.add('on');
+      document.getElementById('inspireInput').focus();
     }
-    g.appendChild(tile);
-  });
 
-  document.getElementById('board').classList.add('on');
-  document.getElementById('board').scrollIntoView({behavior:'smooth'});
-}
+    function closeInspire() {
+      document.getElementById('inspireModal').classList.remove('on');
+    }
 
-function replaceImg(e,input){
-  const f=e.target.files[0]; if(!f)return;
-  const r=new FileReader();
-  r.onload=ev=>{
-    const tile=input.closest('.vision-tile');
-    let img=tile.querySelector('img');
-    const ph=tile.querySelector('.tile-placeholder');
-    if(ph)ph.remove();
-    if(!img){img=document.createElement('img');tile.insertBefore(img,tile.firstChild);}
-    img.src=ev.target.result;
-  };
-  r.readAsDataURL(f);
-}
+    async function runInspire() {
+      const dream = document.getElementById('inspireInput').value.trim();
+      if (!dream) {
+        document.getElementById('inspireInput').focus();
+        return;
+      }
 
-function copyMantra(){
-  navigator.clipboard.writeText(document.getElementById('mantraTxt').textContent)
-    .then(()=>alert('✦ Mantra copied to your clipboard'));
-}
+      const btn = document.getElementById('inspireGoBtn');
+      const loading = document.getElementById('inspireLoading');
+      btn.disabled = true;
+      loading.classList.add('on');
 
-function resetBoard(){
-  document.getElementById('board').classList.remove('on');
-  document.getElementById('formSection').style.display='block';
-  FIELDS.forEach(f=>document.getElementById(f).value='');
-  window.scrollTo({top:0,behavior:'smooth'});
-}
-</script>
+      setTimeout(function () {
+        const lower = dream.toLowerCase();
 
+        const inputs = {
+          mind: 'think clearly, expand daily and trust my inner wisdom',
+          love: 'experience deep love, honest connection and emotional safety',
+          health: 'feel radiant, energised and strong in my body',
+          money: 'live in abundance, freedom and overflow',
+          career: 'create meaningful work that changes lives',
+          adventure: 'travel beautifully and live a rich, unforgettable life'
+        };
+
+        if (lower.includes('love') || lower.includes('relationship') || lower.includes('soulmate')) {
+          inputs.love = 'build a soulmate bond rooted in truth and devotion';
+        }
+        if (lower.includes('money') || lower.includes('wealth') || lower.includes('abundance')) {
+          inputs.money = 'create wealth with ease, joy and self-trust';
+        }
+        if (lower.includes('travel') || lower.includes('world') || lower.includes('adventure')) {
+          inputs.adventure = 'explore the world freely and collect extraordinary memories';
+        }
+        if (lower.includes('health') || lower.includes('body') || lower.includes('energy')) {
+          inputs.health = 'feel vibrant, powerful and deeply well every day';
+        }
+        if (lower.includes('purpose') || lower.includes('career') || lower.includes('business')) {
+          inputs.career = 'build purposeful work that leaves a lasting impact';
+        }
+        if (lower.includes('peace') || lower.includes('clarity') || lower.includes('mind')) {
+          inputs.mind = 'live with calm focus, clarity and spiritual expansion';
+        }
+
+        FIELDS.forEach(function (f) {
+          document.getElementById(f).value = inputs[f];
+        });
+
+        closeInspire();
+        btn.disabled = false;
+        loading.classList.remove('on');
+      }, 1000);
+    }
+
+    (function () {
+      const c = document.getElementById('starfield');
+      for (let i = 0; i < 150; i++) {
+        const s = document.createElement('div');
+        s.className = 'star';
+        const sz = Math.random() * 2.2 + 0.4;
+        s.style.cssText = `width:${sz}px;height:${sz}px;left:${Math.random() * 100}%;top:${Math.random() * 100}%;--d:${(Math.random() * 5 + 2).toFixed(1)}s;animation-delay:-${(Math.random() * 8).toFixed(1)}s;`;
+        c.appendChild(s);
+      }
+    })();
+
+    function fetchImageByField(field) {
+      const pool = DEMO_IMAGES[field] || [];
+      if (!pool.length) return null;
+      return pick(pool);
+    }
+
+    async function generate() {
+      let any = false;
+      FIELDS.forEach(function (f) {
+        if (document.getElementById(f).value.trim()) any = true;
+      });
+
+      if (!any) {
+        document.getElementById('err').classList.add('on');
+        return;
+      }
+
+      document.getElementById('err').classList.remove('on');
+      document.getElementById('formSection').style.display = 'none';
+      document.getElementById('loading').classList.add('on');
+
+      setTimeout(function () {
+        const imgs = FIELDS.map(function (f) {
+          return fetchImageByField(f);
+        });
+
+        const cards = FIELDS.map(function (f, i) {
+          return { field: f, aff: pick(AFFIRMATIONS[f]), img: imgs[i] };
+        });
+
+        renderBoard({
+          title: pick(TITLES),
+          sub: 'Read this every morning. Feel it. Then go build it.',
+          cards: cards,
+          mantra: pick(MANTRAS)
+        });
+      }, 1200);
+    }
+
+    function renderBoard(b) {
+      document.getElementById('loading').classList.remove('on');
+      document.getElementById('bTitle').textContent = b.title;
+      document.getElementById('bSub').textContent = b.sub;
+      document.getElementById('mantraTxt').textContent = b.mantra;
+
+      const g = document.getElementById('visionGrid');
+      g.innerHTML = '';
+
+      b.cards.forEach(function (c, i) {
+        const m = META[c.field];
+        const tile = document.createElement('div');
+        tile.className = 'vision-tile';
+        tile.style.cssText = `animation:up .8s cubic-bezier(.16,1,.3,1) ${i * 0.1}s both;`;
+
+        if (c.img) {
+          tile.innerHTML = `
+            <img src="${c.img}" alt="${m.label}" />
+            <div class="tile-content">
+              <span class="tile-emoji">${m.emoji}</span>
+              <span class="tile-cat">${m.label}</span>
+              <p class="tile-aff">${c.aff}</p>
+            </div>
+            <label class="upload-btn">
+              ↑ Replace Photo
+              <input type="file" accept="image/*" class="upload-input" onchange="replaceImg(event,this)" />
+            </label>
+          `;
+        } else {
+          tile.innerHTML = `
+            <div class="tile-placeholder">${m.emoji}</div>
+            <div class="tile-content">
+              <span class="tile-emoji">${m.emoji}</span>
+              <span class="tile-cat">${m.label}</span>
+              <p class="tile-aff">${c.aff}</p>
+            </div>
+            <label class="upload-btn" style="opacity:1">
+              ↑ Add Photo
+              <input type="file" accept="image/*" class="upload-input" onchange="replaceImg(event,this)" />
+            </label>
+          `;
+        }
+
+        g.appendChild(tile);
+      });
+
+      document.getElementById('board').classList.add('on');
+      document.getElementById('board').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function replaceImg(e, input) {
+      const f = e.target.files[0];
+      if (!f) return;
+
+      const r = new FileReader();
+      r.onload = function (ev) {
+        const tile = input.closest('.vision-tile');
+        let img = tile.querySelector('img');
+        const ph = tile.querySelector('.tile-placeholder');
+
+        if (ph) ph.remove();
+        if (!img) {
+          img = document.createElement('img');
+          tile.insertBefore(img, tile.firstChild);
+        }
+        img.src = ev.target.result;
+      };
+      r.readAsDataURL(f);
+    }
+
+    function copyMantra() {
+      navigator.clipboard.writeText(document.getElementById('mantraTxt').textContent)
+        .then(function () {
+          alert('✦ Mantra copied to your clipboard');
+        });
+    }
+
+    function resetBoard() {
+      document.getElementById('board').classList.remove('on');
+      document.getElementById('formSection').style.display = 'block';
+      FIELDS.forEach(function (f) {
+        document.getElementById(f).value = '';
+      });
+      document.getElementById('inspireInput').value = '';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  </script>
 </body>
 </html>
